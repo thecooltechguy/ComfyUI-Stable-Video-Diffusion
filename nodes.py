@@ -303,6 +303,11 @@ class SVDSimpleImg2Vid:
         checkpoint = os.path.join(folder_paths.get_folder_paths("svd")[0], checkpoint)
         
         if self.svd_model is None or self.is_model_config_different(config, device, num_frames, num_steps, checkpoint):
+            if self.svd_model:
+                del self.svd_model
+                gc.collect()
+                self.svd_model = None
+            
             self.svd_model = load_model(
                 config=config,
                 device=device,
@@ -310,6 +315,13 @@ class SVDSimpleImg2Vid:
                 num_steps=num_steps,
                 checkpoint=checkpoint,
             )
+            self.svd_config = config
+            self.device = device
+            self.num_frames = num_frames
+            self.num_steps = num_steps
+            self.checkpoint = checkpoint
+
+        model = self.svd_model
 
         # convert image torch tensor to PIL image
         # image shape: (1, H, W, C)
