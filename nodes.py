@@ -50,7 +50,6 @@ class SVDModelLoader:
             del self.svd_model
             gc.collect()
             self.svd_model = None
-        print("Loading SVD model...")
         checkpoint_filename_without_extension = os.path.splitext(checkpoint)[0]
         config = os.path.join(folder_paths.get_folder_paths("svd_configs")[0], f"{checkpoint_filename_without_extension}.yaml")
         checkpoint = os.path.join(folder_paths.get_folder_paths("svd")[0], checkpoint)
@@ -61,7 +60,6 @@ class SVDModelLoader:
             num_steps=num_steps,
             checkpoint=checkpoint,
         )
-        print("Loaded SVD model!")
         return (self.svd_model,)
 
 class SVDSampler:
@@ -105,8 +103,6 @@ class SVDSampler:
         # image shape: (1, H, W, C)
         image = image.squeeze(0)
         image = image.permute(2, 0, 1)
-        image = (image + 1.0) / 2.0
-        image = image.clamp(min=0.0, max=1.0)
 
         image = ToPILImage()(image)
 
@@ -159,7 +155,6 @@ class SVDSampler:
 
         with torch.no_grad():
             with torch.autocast(device):
-                print("getting batch")
                 batch, batch_uc = get_batch(
                     get_unique_embedder_keys_from_conditioner(model.conditioner),
                     value_dict,
@@ -168,7 +163,6 @@ class SVDSampler:
                     device=device,
                 )
 
-                print("getting conditioning")
                 c, uc = model.conditioner.get_unconditional_conditioning(
                     batch,
                     batch_uc=batch_uc,
@@ -178,7 +172,6 @@ class SVDSampler:
                     ],
                 )
 
-                print("repeating conditioning")
                 for k in ["crossattn", "concat"]:
                     uc[k] = repeat(uc[k], "b ... -> b t ...", t=num_frames)
                     uc[k] = rearrange(uc[k], "b t ... -> (b t) ...", t=num_frames)
@@ -198,9 +191,7 @@ class SVDSampler:
                         model.model, input, sigma, c, **additional_model_inputs
                     )
 
-                print("sampling: ", randn.shape)
                 samples_z = model.sampler(denoiser, randn, cond=c, uc=uc)
-                print("sampled: ", samples_z.shape)
         
         return (samples_z,)
 
@@ -230,7 +221,6 @@ class SVDDecoder:
     CATEGORY = "Comfy Stable Video Diffusion"
 
     def decode(self, samples_z, model, decoding_t, device):
-        print("decoding: ", samples_z.shape)
         with torch.no_grad():
             with torch.autocast(device):
                 model.en_and_decode_n_samples_a_time = decoding_t
@@ -238,10 +228,8 @@ class SVDDecoder:
                 samples = torch.clamp((samples_x + 1.0) / 2.0, min=0.0, max=1.0)
 
                 vid = (
-                    (rearrange(samples, "t c h w -> t h w c") * 255)
+                    (rearrange(samples, "t c h w -> t h w c") * 1)
                     .cpu()
-                    .numpy()
-                    .astype(np.uint8)
                 )
         return (vid,)
 
