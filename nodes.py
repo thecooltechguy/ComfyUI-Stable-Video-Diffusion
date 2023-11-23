@@ -11,7 +11,7 @@ import numpy as np
 class SVDModelLoader:
     def __init__(self):
         self.svd_model = None
-    
+        
     @classmethod
     def INPUT_TYPES(s):
         checkpoints = folder_paths.get_filename_list("svd")
