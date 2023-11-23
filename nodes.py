@@ -36,6 +36,7 @@ class SVDModelLoader:
                     "min" : 0,
                 }),
                 "device" : (devices,),
+                "lowvram": ("BOOLEAN", {"default": False}),
             },
         }
 
@@ -45,7 +46,7 @@ class SVDModelLoader:
 
     CATEGORY = "ComfyUI Stable Video Diffusion"
 
-    def load_svd_model(self, checkpoint, num_frames, num_steps, device):
+    def load_svd_model(self, checkpoint, num_frames, num_steps, device, lowvram):
         if self.svd_model is not None:
             del self.svd_model
             gc.collect()
@@ -60,6 +61,11 @@ class SVDModelLoader:
             num_steps=num_steps,
             checkpoint=checkpoint,
         )
+
+        if lowvram:
+            print('Using lowvram mode; calling half() on model')
+            self.svd_model.model.half()
+
         return (self.svd_model,)
 
 class SVDSampler:
