@@ -43,7 +43,7 @@ class SVDModelLoader:
 
     FUNCTION = "load_svd_model"
 
-    CATEGORY = "Comfy Stable Video Diffusion"
+    CATEGORY = "ComfyUI Stable Video Diffusion"
 
     def load_svd_model(self, checkpoint, num_frames, num_steps, device):
         if self.svd_model is not None:
@@ -90,13 +90,10 @@ class SVDSampler:
         }
 
     RETURN_TYPES = ("LATENT",)
-    #RETURN_NAMES = ("image_output_name",)
 
     FUNCTION = "sample_video"
 
-    #OUTPUT_NODE = False
-
-    CATEGORY = "Comfy Stable Video Diffusion"
+    CATEGORY = "ComfyUI Stable Video Diffusion"
 
     def sample_video(self, image, model, motion_bucket_id, fps_id, cond_aug, seed, device):
         # convert image torch tensor to PIL image
@@ -218,7 +215,7 @@ class SVDDecoder:
 
     FUNCTION = "decode"
 
-    CATEGORY = "Comfy Stable Video Diffusion"
+    CATEGORY = "ComfyUI Stable Video Diffusion"
 
     def decode(self, samples_z, model, decoding_t, device):
         with torch.no_grad():
@@ -243,7 +240,7 @@ NODE_CLASS_MAPPINGS = {
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "SVDModelLoader" : "Load SVD Model",
-    "SVDSampler": "SVD Sampler",
-    "SVDDecoder": "SVD Decoder",
+    "SVDModelLoader" : "Load Stable Video Diffusion Model",
+    "SVDSampler": "Stable Video Diffusion Sampler",
+    "SVDDecoder": "Stable Video Diffusion Decoder",
 }
