@@ -40,5 +40,13 @@ pip install -r requirements.txt
   - svd_xt.yaml - [Download](https://raw.githubusercontent.com/Stability-AI/generative-models/main/scripts/sampling/configs/svd_xt.yaml)
  - svd_xt_image_decoder.yaml - [Download](https://raw.githubusercontent.com/Stability-AI/generative-models/main/scripts/sampling/configs/svd_xt_image_decoder.yaml)
 
+## Node types
+- **SVDModelLoader**
+    - Loads the Stable Video Diffusion model
+- **SVDSampler**
+    - Runs the sampling process for an input image, using the model, and outputs a latent
+- **SVDDecoder**
+    - Decodes the sampled latent into a series of image frames
+
 ## Need help?
 Join our Discord! https://discord.gg/MfVCahkc2y
