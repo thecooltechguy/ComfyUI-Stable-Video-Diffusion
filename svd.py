@@ -3,7 +3,54 @@ from omegaconf import OmegaConf
 from .util import default, instantiate_from_config
 import torch
 import folder_paths
+import math
+import torch
+from einops import rearrange, repeat
 from typing import Optional
+
+def get_unique_embedder_keys_from_conditioner(conditioner):
+    return list(set([x.input_key for x in conditioner.embedders]))
+
+def get_batch(keys, value_dict, N, T, device):
+    batch = {}
+    batch_uc = {}
+
+    for key in keys:
+        if key == "fps_id":
+            batch[key] = (
+                torch.tensor([value_dict["fps_id"]])
+                .to(device)
+                .repeat(int(math.prod(N)))
+            )
+        elif key == "motion_bucket_id":
+            batch[key] = (
+                torch.tensor([value_dict["motion_bucket_id"]])
+                .to(device)
+                .repeat(int(math.prod(N)))
+            )
+        elif key == "cond_aug":
+            batch[key] = repeat(
+                torch.tensor([value_dict["cond_aug"]]).to(device),
+                "1 -> b",
+                b=math.prod(N),
+            )
+        elif key == "cond_frames":
+            batch[key] = repeat(value_dict["cond_frames"], "1 ... -> b ...", b=N[0])
+        elif key == "cond_frames_without_noise":
+            batch[key] = repeat(
+                value_dict["cond_frames_without_noise"], "1 ... -> b ...", b=N[0]
+            )
+        else:
+            batch[key] = value_dict[key]
+
+    if T is not None:
+        batch["num_video_frames"] = T
+
+    for key in batch.keys():
+        if key not in batch_uc and isinstance(batch[key], torch.Tensor):
+            batch_uc[key] = torch.clone(batch[key])
+    return batch, batch_uc
+
 
 def load_model(
     config: str,
