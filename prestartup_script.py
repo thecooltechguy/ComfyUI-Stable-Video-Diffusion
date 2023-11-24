@@ -16,5 +16,5 @@ existing_svd_models = os.listdir(svd_models_dir)
 
 for model_name, model_url in SVD_MODEL_URLS.items():
     if model_name not in existing_svd_models:
-        print(f"Downloading {model_name}...")
-        os.system(f'wget -O {os.path.join(svd_models_dir, model_name)} "{model_url}"')
+        print(f"Downloading SVD model: {model_name}...")
+        os.system(f'wget -q --show-progress -O {os.path.join(svd_models_dir, model_name)} "{model_url}"')
