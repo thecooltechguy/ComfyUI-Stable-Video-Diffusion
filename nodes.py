@@ -65,6 +65,8 @@ class SVDModelLoader:
         if lowvram:
             print('Using lowvram mode; calling half() on model')
             self.svd_model.model.half()
+        else:
+            self.svd_model.model.cuda()
 
         return (self.svd_model,)
 
