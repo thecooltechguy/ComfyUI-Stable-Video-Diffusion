@@ -15,10 +15,9 @@ class SVDModelLoader:
     @classmethod
     def INPUT_TYPES(s):
         checkpoints = folder_paths.get_filename_list("svd")
-        configs = os.listdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), "svd_configs"))
 
         devices = []
-        if torch.cuda.is_available():
+        if True: #torch.cuda.is_available():
             devices.append("cuda")
         devices.append("cpu")
 
@@ -50,7 +49,7 @@ class SVDModelLoader:
             del self.svd_model
             gc.collect()
             self.svd_model = None
-        checkpoint_filename_without_extension = os.path.splitext(checkpoint)[0]
+        checkpoint_filename_without_extension = os.path.splitext(os.path.basename(checkpoint))[0]
         config = os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "svd_configs"), f"{checkpoint_filename_without_extension}.yaml")
         checkpoint = os.path.join(folder_paths.get_folder_paths("svd")[0], checkpoint)
         self.svd_model = load_model(
@@ -66,7 +65,7 @@ class SVDSampler:
     @classmethod
     def INPUT_TYPES(s):
         devices = []
-        if torch.cuda.is_available():
+        if True: #torch.cuda.is_available():
             devices.append("cuda")
         devices.append("cpu")
         return {
@@ -197,7 +196,7 @@ class SVDDecoder:
     @classmethod
     def INPUT_TYPES(s):
         devices = []
-        if torch.cuda.is_available():
+        if True: #torch.cuda.is_available():
             devices.append("cuda")
         devices.append("cpu")
         return {
@@ -251,7 +250,7 @@ class SVDSimpleImg2Vid:
         configs = os.listdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), "svd_configs"))
 
         devices = []
-        if torch.cuda.is_available():
+        if True: #torch.cuda.is_available():
             devices.append("cuda")
         devices.append("cpu")
 
@@ -298,7 +297,7 @@ class SVDSimpleImg2Vid:
     CATEGORY = "ComfyUI Stable Video Diffusion"
 
     def img2vid(self, image, checkpoint, num_frames, num_steps, motion_bucket_id, fps_id, cond_aug, seed, decoding_t, device):
-        checkpoint_filename_without_extension = os.path.splitext(checkpoint)[0]
+        checkpoint_filename_without_extension = os.path.splitext(os.path.basename(checkpoint))[0]
         config = os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), "svd_configs"), f"{checkpoint_filename_without_extension}.yaml")
         checkpoint = os.path.join(folder_paths.get_folder_paths("svd")[0], checkpoint)
         
