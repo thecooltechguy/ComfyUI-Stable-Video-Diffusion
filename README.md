@@ -14,11 +14,16 @@ Easily use Stable Video Diffusion inside ComfyUI!
 Need help? <a href="https://discord.gg/hwwbNRAq6E">Join our Discord!</a>
 
 ## 1. Installation
+
+### Option 1: Install via ComfyUI Manager
+Open ComfyUI Manager and install the `ComfyUI-Stable-Video-Diffusion` custom node.
+
+### Option 2: Install manually
 ```
 cd ComfyUI/custom_nodes/
 git clone https://github.com/thecooltechguy/ComfyUI-Stable-Video-Diffusion
 cd ComfyUI-Stable-Video-Diffusion/
-pip install -r requirements.txt
+python install.py
 ```
 
 ### 2. Download models into `ComfyUI/models/svd/`
