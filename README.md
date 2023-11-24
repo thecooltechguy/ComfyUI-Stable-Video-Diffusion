@@ -16,7 +16,7 @@ Need help? <a href="https://discord.gg/hwwbNRAq6E">Join our Discord!</a>
 ## 1. Installation
 
 ### Option 1: Install via ComfyUI Manager
-Open ComfyUI Manager and install the `ComfyUI-Stable-Video-Diffusion` custom node.
+Open ComfyUI Manager and install the **ComfyUI Stable Video Diffusion** (author: **thecooltechguy**) custom node.
 
 ### Option 2: Install manually
 ```
